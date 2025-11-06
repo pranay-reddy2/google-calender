@@ -8,13 +8,15 @@ import { useCalendarStore } from "./store/useCalendarStore";
 import Login from "./pages/Login";
 import Calendar from "./pages/Calendar";
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+// ✅ Fallback client ID if env var is missing
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  "689854857229-bdmk4ped13lh65dheqtd76dpformsa65.apps.googleusercontent.com";
 
 function App() {
   const { isAuthenticated, isLoading, loadUser } = useAuthStore();
   const { initTheme } = useThemeStore();
 
-  // Calendar store actions
   const {
     fetchCalendars,
     fetchSharedCalendars,
@@ -24,13 +26,13 @@ function App() {
     selectedCalendars,
   } = useCalendarStore();
 
-  /** 🔹 Load user and theme on startup */
+  // 🔹 Initialize user and theme
   useEffect(() => {
     loadUser();
     initTheme();
   }, [loadUser, initTheme]);
 
-  /** 🔹 Load calendars once after authentication */
+  // 🔹 Fetch calendars after login
   useEffect(() => {
     if (!isAuthenticated) return;
     const initializeCalendars = async () => {
@@ -40,7 +42,7 @@ function App() {
     initializeCalendars();
   }, [isAuthenticated, fetchCalendars, fetchSharedCalendars]);
 
-  /** 🔹 Fetch events when date/view/selected calendars change */
+  // 🔹 Fetch events whenever view/date/calendars change
   useEffect(() => {
     if (!isAuthenticated || selectedCalendars.length === 0) return;
 
@@ -88,24 +90,21 @@ function App() {
     fetchEvents,
   ]);
 
-  /** 🔹 Show loading spinner while verifying auth */
+  // 🔹 Loading spinner
   if (isLoading) {
     return (
-      // Removed bg-white dark:bg-zinc-900 to allow body background to show
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          {/* Using text-gray-600 dark:text-gray-400 is fine as it's not a background */}
           <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
     );
   }
 
-  /** 🔹 App Routes */
+  // ✅ Wrap with GoogleOAuthProvider
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      {/* Removed bg-white dark:bg-zinc-900 to allow body background to show */}
       <div className="min-h-screen">
         <BrowserRouter
           future={{
