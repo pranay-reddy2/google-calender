@@ -39,7 +39,7 @@ export const useHolidayStore = create((set, get) => ({
 
     try {
       // Build URL with query parameters
-      const url = new URL("http://localhost:5000/api/holidays");
+      const url = new URL("http://localhost:5050/api/holidays");
       url.searchParams.append("startDate", startDateStr);
       url.searchParams.append("endDate", endDateStr);
 
@@ -94,7 +94,7 @@ export const useHolidayStore = create((set, get) => ({
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/holidays/preferences",
+        "http://localhost:5050/api/holidays/preferences",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -126,7 +126,7 @@ export const useHolidayStore = create((set, get) => ({
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/holidays/preferences",
+        "http://localhost:5050/api/holidays/preferences",
         {
           method: "POST",
           headers: {
@@ -172,7 +172,7 @@ export const useHolidayStore = create((set, get) => ({
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/holidays/preferences",
+        "http://localhost:5050/api/holidays/preferences",
         {
           method: "POST",
           headers: {
@@ -213,7 +213,7 @@ export const useHolidayStore = create((set, get) => ({
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost:5000/api/holidays/sync", {
+      const res = await fetch("http://localhost:5050/api/holidays/sync", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
